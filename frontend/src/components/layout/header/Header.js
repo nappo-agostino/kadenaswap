@@ -129,7 +129,11 @@ const Header = () => {
           style={{ cursor: "pointer", marginRight: 10 }}
           onClick={() => history.push(ROUTE_INDEX)}
         />
-        <Item className="mobile-none" to="/">
+        <Item
+          className="mobile-none"
+          style={{ color: theme.colors.lightBlue }}
+          to="/"
+        >
           Kadena
         </Item>
         <Item to={ROUTE_SWAP}>swap</Item>

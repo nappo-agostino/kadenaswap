@@ -51,7 +51,7 @@ const PoolContainer = () => {
   const [selectedView, setSelectedView] = useState(false);
   const [pair, setPair] = useState(null);
   const pact = useContext(PactContext);
-  console.log("selectedView", selectedView);
+
   return (
     <Container>
       {selectedView === "Remove Liquidity" ? (

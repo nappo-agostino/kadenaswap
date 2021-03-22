@@ -391,7 +391,6 @@ const LiquidityContainer = (props) => {
     <Container>
       <FormContainer
         title={selectedView}
-        wrapperStyle={{width: "100%", display: "flex", alignItems: "center"}}
         onBackClick={() => props.closeLiquidity()}
       >
         <TokenSelector

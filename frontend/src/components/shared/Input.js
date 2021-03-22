@@ -1,18 +1,30 @@
 import React from "react";
 import PropTypes from "prop-types";
 import styled from "styled-components/macro";
-import {Input as SUIInput} from "semantic-ui-react";
-import {ReactComponent as ArrowDown} from "../../assets/images/shared/arrow-down.svg";
-import {theme} from "../../styles/theme";
+import { Input as SUIInput } from "semantic-ui-react";
+import { ReactComponent as ArrowDown } from "../../assets/images/shared/arrow-down.svg";
+import { theme } from "../../styles/theme";
 
 const Container = styled.div`
   display: flex;
   flex-flow: column;
+
+  .ui.input > input {
+    background: ${({ theme: { colors } }) => colors.gray};
+    color: ${({ theme: { colors } }) => colors.whiteSmoke};
+    width: 100% !important;
+  }
+
+  & .ui.input > input::placeholder {
+    color: ${({ theme: { colors } }) => colors.whiteSmoke};
+    opacity: 1;
+  }
+
   & input::placeholder {
     text-transform: capitalize;
   }
   .ui.icon.input > input {
-    padding-right: ${({inputRightComponent, inputComponentWidth}) =>
+    padding-right: ${({ inputRightComponent, inputComponentWidth }) =>
       inputRightComponent ? `${inputComponentWidth + 25}px !important` : 0};
   }
   .ui.button:hover .icon {
@@ -26,6 +38,7 @@ const LabelsContainer = styled.div`
   margin-bottom: 4px;
   margin-left: 2px;
   margin-right: 2px;
+  color: ${({ theme: { colors } }) => colors.whiteSmoke};
   span {
     font-size: 13px;
     text-transform: capitalize;
@@ -34,17 +47,18 @@ const LabelsContainer = styled.div`
 `;
 
 const Button = styled.button`
+  cursor: pointer;
   display: flex !important;
   border: none;
   border-radius: 20px;
   justify-content: space-between;
   align-items: center;
-  background-color: ${({theme: {colors}}) => colors.lightBlue};
   position: absolute;
   top: 25%;
   right: 10px;
   max-height: 22px;
   padding: 8px !important;
+  background-color: ${({ theme: { colors } }) => colors.lightBlue};
   span {
     font-family: neue-bold;
     font-size: 14px;
@@ -100,24 +114,11 @@ const Input = ({
       }
       style={containerStyle}
     >
-      {(leftLabel || rightLabel) && (
-        <LabelsContainer>
-          {leftLabel && (
-            <span style={{fontFamily: "neue-bold", ...leftLabelStyle}}>
-              {leftLabel}
-            </span>
-          )}
-          {rightLabel && (
-            <span
-              style={{
-                fontFamily: "neue-regular",
-                marginLeft: !leftLabel ? "auto" : "unset",
-                ...rightLabelStyle,
-              }}
-            >
-              {rightLabel}
-            </span>
-          )}
+      {leftLabel && (
+        <LabelsContainer style={{ marginBottom: 8 }}>
+          <span style={{ fontFamily: "neue-bold", ...leftLabelStyle }}>
+            {leftLabel}
+          </span>
         </LabelsContainer>
       )}
       <SUIInput
@@ -134,6 +135,19 @@ const Input = ({
           onChange(e, props);
         }}
       />
+      {rightLabel && (
+        <LabelsContainer style={{ marginTop: 8 }}>
+          <span
+            style={{
+              fontFamily: "neue-regular",
+              marginLeft: !leftLabel ? "auto" : "unset",
+              ...rightLabelStyle,
+            }}
+          >
+            {rightLabel}
+          </span>
+        </LabelsContainer>
+      )}
       {bottomLabel && (
         <LabelsContainer>
           <span
