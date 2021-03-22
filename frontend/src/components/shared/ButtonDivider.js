@@ -1,5 +1,5 @@
-import React from 'react';
-import styled from 'styled-components/macro';
+import React from "react";
+import styled from "styled-components/macro";
 
 const Container = styled.div`
   display: flex;
@@ -20,7 +20,6 @@ const Button = styled.button`
   height: 32px;
   padding: 0;
   margin: 0;
-  background: ${({ theme: { buttonBackgroundGradient } }) => buttonBackgroundGradient};
 `;
 
 const Track = styled.div`

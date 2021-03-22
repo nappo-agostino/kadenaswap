@@ -338,7 +338,11 @@ const SwapContainer = () => {
               }));
             }}
           />
-          <ButtonDivider icon={<SwapArrowsIcon />} onClick={swapValues} />
+          <ButtonDivider
+            buttonStyle={{ background: "transparent" }}
+            icon={<SwapArrowsIcon />}
+            onClick={swapValues}
+          />
           <Input
             error={isNaN(toValues.amount)}
             leftLabel={`to ${toNote}`}
