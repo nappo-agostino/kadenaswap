@@ -12,34 +12,54 @@ import TxView from "../components/shared/TxView";
 import { PactContext } from "../contexts/PactContext";
 import { throttle, debounce } from "throttle-debounce";
 import pwError from "../components/alerts/pwError";
+import theme from "../styles/theme";
 
 const Container = styled.div`
   display: flex;
+  flex-flow: column;
   justify-content: center;
   align-items: center;
 `;
 
-const RowContainer = styled.div`
+const ColumnContainer = styled.div`
   display: flex;
+  flex-flow: column;
   justify-content: space-between;
   margin: 15px 0px;
 `;
 
 const Label = styled.span`
-  font-size: 13px;
-  font-family: neue-bold;
+  font-size: 14px;
+  font-family: neue-regular;
   text-transform: capitalize;
 `;
 
 const SwapInputContainer = styled.div`
   display: flex;
   flex-flow: column;
+  max-width: 757px;
+  width: 100%;
 
   @media (min-width: ${({
       theme: {
         mediaQueries: { mobileBreakpoint },
       },
     }) => mobileBreakpoint}) {
+    flex-flow: row;
+  }
+`;
+
+const SwapInfoContainer = styled.div`
+  display: flex;
+  flex-flow: column;
+  justify-content: space-between;
+  max-width: 757px;
+  margin-top: 24px;
+  color: ${({ theme: { colors } }) => colors.whiteSmoke};
+
+  @media (min-width: ${({ theme: { mediaQueries } }) =>
+      mediaQueries.mobileBreakpoint}) {
+    width: 100%;
     flex-flow: row;
   }
 `;
@@ -283,7 +303,7 @@ const SwapContainer = () => {
   };
 
   const getButtonLabel = () => {
-    if (!pact.account.account) return "Connect your KDA wallet";
+    if (!pact.account.account) return "Connect Wallet";
     if (!pact.hasWallet()) return "Set signing method in wallet";
     if (!fromValues.coin || !toValues.coin) return "Select tokens";
     if (fetchingPair) return "Fetching Pair...";
@@ -313,6 +333,7 @@ const SwapContainer = () => {
       <FormContainer title="swap" flexFlow="row">
         <SwapInputContainer>
           <Input
+            fluid
             error={isNaN(fromValues.amount)}
             leftLabel={`from ${fromNote}`}
             rightLabel={`balance: ${reduceBalance(fromValues.balance) ?? "-"}`}
@@ -341,9 +362,11 @@ const SwapContainer = () => {
           <ButtonDivider
             buttonStyle={{ background: "transparent" }}
             icon={<SwapArrowsIcon />}
+            withoutDivider
             onClick={swapValues}
           />
           <Input
+            fluid
             error={isNaN(toValues.amount)}
             leftLabel={`to ${toNote}`}
             rightLabel={`balance: ${reduceBalance(toValues.balance) ?? "-"}`}
@@ -369,140 +392,155 @@ const SwapContainer = () => {
               }));
             }}
           />
-          {!isNaN(pact.ratio) &&
-          fromValues.amount &&
-          fromValues.coin &&
-          toValues.amount &&
-          toValues.coin ? (
-            <>
-              <RowContainer>
-                <Label>price</Label>
-                <span>{`${reduceBalance(pact.ratio * (1 + priceImpact))} ${
-                  fromValues.coin
-                } per ${toValues.coin}`}</span>
-              </RowContainer>
-              <RowContainer style={{ marginTop: 5 }}>
-                <Label>Price Impact</Label>
-                <span
-                  style={{
-                    color:
-                      pact.priceImpactWithoutFee(priceImpact) > 0.1
-                        ? "red"
-                        : "green",
-                  }}
-                >
-                  {pact.priceImpactWithoutFee(priceImpact) < 0.0001 &&
-                  pact.priceImpactWithoutFee(priceImpact)
-                    ? "< 0.01%"
-                    : `${reduceBalance(
-                        pact.priceImpactWithoutFee(priceImpact) * 100,
-                        4
-                      )}%`}
-                </span>
-              </RowContainer>
-              <RowContainer style={{ marginTop: 5 }}>
-                <Label>max slippage</Label>
-                <span>{`${pact.slippage * 100}%`}</span>
-              </RowContainer>
-              <RowContainer style={{ marginTop: 5 }}>
-                <Label>liquidity provider fee</Label>
-                <span>{`${reduceBalance(
-                  pact.liquidityProviderFee * parseFloat(fromValues.amount),
-                  14
-                )} ${fromValues.coin}`}</span>
-              </RowContainer>
-            </>
-          ) : (
-            <></>
-          )}
-          <Button
-            buttonStyle={{ marginTop: 24, marginRight: 0 }}
-            disabled={
-              getButtonLabel() !== "SWAP" ||
-              isNaN(fromValues.amount) ||
-              isNaN(toValues.amount)
-            }
-            loading={loading}
-            onClick={async () => {
-              setLoading(true);
-              if (pact.signing.method !== "sign") {
-                const res = await pact.swapLocal(
-                  {
-                    amount: fromValues.amount,
-                    address: fromValues.address,
-                    coin: fromValues.coin,
-                  },
-                  {
-                    amount: toValues.amount,
-                    address: toValues.address,
-                    coin: toValues.coin,
-                  },
-                  fromNote === "(estimated)" ? false : true
-                );
-                if (res === -1) {
-                  setLoading(false);
-                  //error alert
-                  if (pact.localRes) pwError();
-                  return;
-                } else {
-                  setShowTxModal(true);
-                  if (res?.result?.status === "success") {
-                    setFromValues({
-                      amount: "",
-                      balance: "",
-                      coin: "",
-                      address: "",
-                      precision: 0,
-                    });
-                    setToValues({
-                      amount: "",
-                      balance: "",
-                      coin: "",
-                      address: "",
-                      precision: 0,
-                    });
-                  }
-                  setLoading(false);
-                }
-              } else {
-                const res = await pact.swapWallet(
-                  {
-                    amount: fromValues.amount,
-                    address: fromValues.address,
-                    coin: fromValues.coin,
-                  },
-                  {
-                    amount: toValues.amount,
-                    address: toValues.address,
-                    coin: toValues.coin,
-                  },
-                  fromNote === "(estimated)" ? false : true
-                );
-                setShowTxModal(true);
-                if (res?.result?.status === "success") {
-                  setFromValues({
-                    amount: "",
-                    balance: "",
-                    coin: "",
-                    address: "",
-                    precision: 0,
-                  });
-                  setToValues({
-                    amount: "",
-                    balance: "",
-                    coin: "",
-                    address: "",
-                    precision: 0,
-                  });
-                }
-                setLoading(false);
-              }
-            }}
-          >
-            {getButtonLabel()}
-          </Button>
         </SwapInputContainer>
       </FormContainer>
+      {!isNaN(pact.ratio) &&
+        fromValues.amount &&
+        fromValues.coin &&
+        toValues.amount &&
+        toValues.coin && (
+          <SwapInfoContainer>
+            <ColumnContainer>
+              <Label>price</Label>
+              <span
+                style={{ fontSize: 16, fontFamily: "neue-bold", marginTop: 5 }}
+              >{`${reduceBalance(pact.ratio * (1 + priceImpact))} ${
+                fromValues.coin
+              } per ${toValues.coin}`}</span>
+            </ColumnContainer>
+            <ColumnContainer>
+              <Label>Price Impact</Label>
+              <span
+                style={{
+                  fontSize: 16,
+                  fontFamily: "neue-bold",
+                  marginTop: 5,
+                  // color:
+                  //   pact.priceImpactWithoutFee(priceImpact) > 0.1
+                  //     ? "red"
+                  //     : "green",
+                }}
+              >
+                {pact.priceImpactWithoutFee(priceImpact) < 0.0001 &&
+                pact.priceImpactWithoutFee(priceImpact)
+                  ? "< 0.01%"
+                  : `${reduceBalance(
+                      pact.priceImpactWithoutFee(priceImpact) * 100,
+                      4
+                    )}%`}
+              </span>
+            </ColumnContainer>
+            <ColumnContainer>
+              <Label>max slippage</Label>
+              <span
+                style={{ fontSize: 16, fontFamily: "neue-bold", marginTop: 5 }}
+              >{`${pact.slippage * 100}%`}</span>
+            </ColumnContainer>
+            <ColumnContainer>
+              <Label>liquidity provider fee</Label>
+              <span
+                style={{ fontSize: 16, fontFamily: "neue-bold", marginTop: 5 }}
+              >{`${reduceBalance(
+                pact.liquidityProviderFee * parseFloat(fromValues.amount),
+                14
+              )} ${fromValues.coin}`}</span>
+            </ColumnContainer>
+          </SwapInfoContainer>
+        )}
+      <Button
+        background={theme.colors.lightBlue}
+        color="white"
+        fontSize={16}
+        buttonStyle={{
+          marginTop: 24,
+          marginRight: 0,
+          borderRadius: 20,
+          padding: "10px 50px",
+        }}
+        disabled={
+          getButtonLabel() !== "SWAP" ||
+          isNaN(fromValues.amount) ||
+          isNaN(toValues.amount)
+        }
+        loading={loading}
+        onClick={async () => {
+          setLoading(true);
+          if (pact.signing.method !== "sign") {
+            const res = await pact.swapLocal(
+              {
+                amount: fromValues.amount,
+                address: fromValues.address,
+                coin: fromValues.coin,
+              },
+              {
+                amount: toValues.amount,
+                address: toValues.address,
+                coin: toValues.coin,
+              },
+              fromNote === "(estimated)" ? false : true
+            );
+            if (res === -1) {
+              setLoading(false);
+              //error alert
+              if (pact.localRes) pwError();
+              return;
+            } else {
+              setShowTxModal(true);
+              if (res?.result?.status === "success") {
+                setFromValues({
+                  amount: "",
+                  balance: "",
+                  coin: "",
+                  address: "",
+                  precision: 0,
+                });
+                setToValues({
+                  amount: "",
+                  balance: "",
+                  coin: "",
+                  address: "",
+                  precision: 0,
+                });
+              }
+              setLoading(false);
+            }
+          } else {
+            const res = await pact.swapWallet(
+              {
+                amount: fromValues.amount,
+                address: fromValues.address,
+                coin: fromValues.coin,
+              },
+              {
+                amount: toValues.amount,
+                address: toValues.address,
+                coin: toValues.coin,
+              },
+              fromNote === "(estimated)" ? false : true
+            );
+            setShowTxModal(true);
+            if (res?.result?.status === "success") {
+              setFromValues({
+                amount: "",
+                balance: "",
+                coin: "",
+                address: "",
+                precision: 0,
+              });
+              setToValues({
+                amount: "",
+                balance: "",
+                coin: "",
+                address: "",
+                precision: 0,
+              });
+            }
+            setLoading(false);
+          }
+        }}
+      >
+        {getButtonLabel()}
+      </Button>
     </Container>
   );
 };

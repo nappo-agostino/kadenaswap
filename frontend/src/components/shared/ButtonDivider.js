@@ -6,7 +6,12 @@ const Container = styled.div`
   justify-content: center;
   align-items: center;
   flex-wrap: nowrap;
-  margin: 16px 0px;
+  margin: 16px 32px;
+
+  @media (min-width: ${({ theme: { mediaQueries } }) =>
+      mediaQueries.mobileBreakpoint}) {
+    transform: rotateZ(90deg);
+  }
 `;
 
 const Button = styled.button`
@@ -16,8 +21,8 @@ const Button = styled.button`
   align-items: center;
   border: none;
   border-radius: 100%;
-  width: 32px;
-  height: 32px;
+  width: 48px;
+  height: 48px;
   padding: 0;
   margin: 0;
 `;
@@ -28,14 +33,20 @@ const Track = styled.div`
   background-color: ${({ theme: { colors } }) => colors.border};
 `;
 
-const ButtonDivider = ({ icon, containerStyle, buttonStyle, onClick }) => {
+const ButtonDivider = ({
+  icon,
+  containerStyle,
+  buttonStyle,
+  withoutDivider,
+  onClick,
+}) => {
   return (
     <Container style={containerStyle}>
-      <Track />
+      {!withoutDivider && <Track />}
       <Button style={buttonStyle} onClick={onClick}>
         {icon}
       </Button>
-      <Track />
+      {!withoutDivider && <Track />}
     </Container>
   );
 };

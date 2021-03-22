@@ -20,6 +20,7 @@ export const theme = {
     lightBlue: "#27B7E6",
     black: "#232323",
     whiteSmoke: "#E0E0E0",
+    gray: "#424242",
   },
   inputTokenWidth: 78,
   inputSelectButtonWidth: 81,
