@@ -1,7 +1,7 @@
-import React from 'react';
-import PropTypes from 'prop-types';
-import styled from 'styled-components/macro';
-import { ReactComponent as ArrowDown } from '../../assets/images/shared/arrow-down.svg';
+import React from "react";
+import PropTypes from "prop-types";
+import styled from "styled-components/macro";
+import { ReactComponent as ArrowDown } from "../../assets/images/shared/arrow-down.svg";
 
 const Container = styled.div`
   cursor: pointer;
@@ -12,6 +12,7 @@ const Container = styled.div`
   justify-content: space-between;
   align-items: center;
   min-width: ${({ theme: { inputTokenWidth } }) => `${inputTokenWidth}px`};
+  color: ${({ theme: { colors } }) => colors.whiteSmoke};
 
   svg:first-child {
     margin-right: 8px;
@@ -26,23 +27,21 @@ const Container = styled.div`
 const InputToken = ({ icon, code, onClick }) => {
   return (
     <Container onClick={onClick}>
-
-        {icon}
-
+      {icon}
       <span>{code}</span>
-      <ArrowDown />
+      <ArrowDown style={{ fill: "white" }} />
     </Container>
   );
 };
 
 InputToken.propTypes = {
   icon: PropTypes.element,
-  code: PropTypes.string
+  code: PropTypes.string,
 };
 
 InputToken.defaultProps = {
   icon: null,
-  code: ''
+  code: "",
 };
 
 export default InputToken;
