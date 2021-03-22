@@ -34,16 +34,20 @@ const Title = styled.span`
 
 const FormContainer = ({
   title,
+  wrapperStyle,
   containerStyle,
   titleStyle,
+  closeIconStyle,
   flexFlow,
+  allInContainer,
   children,
   onClose,
 }) => {
   return (
-    <Wrapper>
-      {title && <Title style={titleStyle}>{title}</Title>}
+    <Wrapper style={wrapperStyle}>
+      {!allInContainer && title && <Title style={titleStyle}>{title}</Title>}
       <Container style={containerStyle} flexFlow={flexFlow}>
+        {allInContainer && title && <Title style={titleStyle}>{title}</Title>}
         {onClose && (
           <CloseIcon
             style={{
@@ -51,6 +55,7 @@ const FormContainer = ({
               position: "absolute",
               top: 18,
               right: 14,
+              ...closeIconStyle,
             }}
             onClick={onClose}
           />

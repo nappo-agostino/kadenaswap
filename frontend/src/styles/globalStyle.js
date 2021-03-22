@@ -1,4 +1,4 @@
-import { createGlobalStyle } from 'styled-components';
+import { createGlobalStyle } from "styled-components";
 
 export default createGlobalStyle`
     *, *:before, *:after {
@@ -25,7 +25,7 @@ export default createGlobalStyle`
       overflow: auto;
       min-width: 0;
       font-family: neue-regular;
-      color: ${({ theme: { colors } }) => colors.primary};
+      color: ${({ theme: { colors } }) => colors.whiteSmoke};
       background: ${() => `url(/images/background.jpg)`};
       background-color: #9d4f9e;
       background-size: cover;
@@ -47,13 +47,15 @@ export default createGlobalStyle`
     }
 
     .desktop-none {
-      @media (min-width: ${({ theme: { mediaQueries } }) => `${mediaQueries.mobilePixel + 1}px`}) {
+      @media (min-width: ${({ theme: { mediaQueries } }) =>
+        `${mediaQueries.mobilePixel + 1}px`}) {
         display: none !important;
       }
     }
 
     .mobile-none {
-      @media (max-width: ${({ theme: { mediaQueries } }) => `${mediaQueries.mobilePixel}px`}) {
+      @media (max-width: ${({ theme: { mediaQueries } }) =>
+        `${mediaQueries.mobilePixel}px`}) {
         display: none !important;
       }
     }
