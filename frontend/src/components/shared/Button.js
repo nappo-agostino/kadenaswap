@@ -1,27 +1,26 @@
 /* eslint-disable react/jsx-props-no-spreading */
 import React from "react";
 import styled from "styled-components/macro";
-import { Button as SUIButton } from "semantic-ui-react";
+import {Button as SUIButton} from "semantic-ui-react";
 
 const StyledButton = styled(SUIButton)`
+  border-radius: 20px !important;
+
   font-family: neue-bold !important;
-  font-size: ${({ fontSize }) =>
+  font-size: ${({fontSize}) =>
     fontSize ? fontSize + " !important" : "16px !important"};
-  color: ${({ color }) => (color ? color + " !important" : "white !important")};
-  background: ${({
-    disabled,
-    background,
-    theme: { buttonBackgroundGradient },
-  }) => {
+  color: ${({color}) => (color ? color + " !important" : "white !important")};
+  background: ${({disabled, background, theme: {buttonBackgroundGradient}}) => {
     if (background) return background + " !important";
     if (disabled) return "#CDCDCD !important";
     return buttonBackgroundGradient;
   }};
   opacity: 1 !important;
   :hover {
-    opacity: ${({ hover }) => (hover ? 0.7 : 1.0) + " !important"};
+    opacity: ${({hover}) => (hover ? 0.7 : 1.0) + " !important"};
     cursor: pointer;
   }
+  height: 40px;
 `;
 
 const Button = ({

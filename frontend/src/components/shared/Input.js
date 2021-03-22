@@ -1,9 +1,9 @@
-import React from 'react';
-import PropTypes from 'prop-types';
-import styled from 'styled-components/macro';
-import { Input as SUIInput } from 'semantic-ui-react';
-import { ReactComponent as ArrowDown } from '../../assets/images/shared/arrow-down.svg';
-import { theme } from '../../styles/theme';
+import React from "react";
+import PropTypes from "prop-types";
+import styled from "styled-components/macro";
+import {Input as SUIInput} from "semantic-ui-react";
+import {ReactComponent as ArrowDown} from "../../assets/images/shared/arrow-down.svg";
+import {theme} from "../../styles/theme";
 
 const Container = styled.div`
   display: flex;
@@ -12,7 +12,8 @@ const Container = styled.div`
     text-transform: capitalize;
   }
   .ui.icon.input > input {
-    padding-right: ${({ inputRightComponent, inputComponentWidth }) => (inputRightComponent ? `${inputComponentWidth + 25}px !important` : 0)};
+    padding-right: ${({inputRightComponent, inputComponentWidth}) =>
+      inputRightComponent ? `${inputComponentWidth + 25}px !important` : 0};
   }
   .ui.button:hover .icon {
     opacity: 1;
@@ -28,22 +29,22 @@ const LabelsContainer = styled.div`
   span {
     font-size: 13px;
     text-transform: capitalize;
+    color: ${({theme: {colors}}) => colors.whiteSmoke};
   }
 `;
 
 const Button = styled.button`
   display: flex !important;
   border: none;
-  border-radius: 4px;
+  border-radius: 20px;
   justify-content: space-between;
   align-items: center;
-  background-color: red;
+  background-color: ${({theme: {colors}}) => colors.lightBlue};
   position: absolute;
   top: 25%;
   right: 10px;
   max-height: 22px;
   padding: 8px !important;
-  background: ${({ theme: { buttonBackgroundGradient } }) => buttonBackgroundGradient};
   span {
     font-family: neue-bold;
     font-size: 14px;
@@ -56,8 +57,10 @@ const Input = ({
   fluid,
   leftLabel,
   rightLabel,
+  bottomLabel,
   leftLabelStyle,
   rightLabelStyle,
+  bottomLabelStyle,
   containerStyle,
   placeholder,
   size,
@@ -90,14 +93,30 @@ const Input = ({
   return (
     <Container
       inputRightComponent={inputRightComponent || withSelectButton}
-      inputComponentWidth={inputRightComponent ? theme.inputTokenWidth : theme.inputSelectButtonWidth}
+      inputComponentWidth={
+        inputRightComponent
+          ? theme.inputTokenWidth
+          : theme.inputSelectButtonWidth
+      }
       style={containerStyle}
     >
       {(leftLabel || rightLabel) && (
         <LabelsContainer>
-          {leftLabel && <span style={{ fontFamily: 'neue-bold', ...leftLabelStyle }}>{leftLabel}</span>}
+          {leftLabel && (
+            <span style={{fontFamily: "neue-bold", ...leftLabelStyle}}>
+              {leftLabel}
+            </span>
+          )}
           {rightLabel && (
-            <span style={{ fontFamily: 'neue-regular', marginLeft: !leftLabel ? 'auto' : 'unset', ...rightLabelStyle }}>{rightLabel}</span>
+            <span
+              style={{
+                fontFamily: "neue-regular",
+                marginLeft: !leftLabel ? "auto" : "unset",
+                ...rightLabelStyle,
+              }}
+            >
+              {rightLabel}
+            </span>
           )}
         </LabelsContainer>
       )}
@@ -115,6 +134,15 @@ const Input = ({
           onChange(e, props);
         }}
       />
+      {bottomLabel && (
+        <LabelsContainer>
+          <span
+            style={{fontFamily: "neue-bold", marginTop: 8, ...bottomLabelStyle}}
+          >
+            {bottomLabel}
+          </span>
+        </LabelsContainer>
+      )}
     </Container>
   );
 };
@@ -124,23 +152,23 @@ Input.propTypes = {
   leftLabel: PropTypes.string,
   rightLabel: PropTypes.string,
   placeholder: PropTypes.string,
-  size: PropTypes.oneOf(['big', 'huge', 'large', 'massive', 'mini', 'small']),
+  size: PropTypes.oneOf(["big", "huge", "large", "massive", "mini", "small"]),
   inputRightComponent: PropTypes.element,
   withSelectButton: PropTypes.bool,
   numberOnly: PropTypes.bool,
-  buttonLabel: PropTypes.string
+  buttonLabel: PropTypes.string,
 };
 
 Input.defaultProps = {
   fluid: true,
-  leftLabel: '',
-  rightLabel: '',
-  placeholder: '',
-  size: 'big',
+  leftLabel: "",
+  rightLabel: "",
+  placeholder: "",
+  size: "big",
   inputRightComponent: null,
   withSelectButton: false,
   numberOnly: false,
-  buttonLabel: 'select '
+  buttonLabel: "select ",
 };
 
 export default Input;

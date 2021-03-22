@@ -1,7 +1,7 @@
 import React from "react";
 import PropTypes from "prop-types";
 import styled from "styled-components/macro";
-import { ReactComponent as CloseIcon } from "../../assets/images/shared/cross.svg";
+import {ReactComponent as CloseIcon} from "../../assets/images/shared/cross.svg";
 
 const Wrapper = styled.div`
   display: flex;
@@ -16,11 +16,11 @@ const Container = styled.div`
   max-width: 757px;
   width: 100%;
   border-radius: 10px;
-  background-color: ${({ theme: { colors } }) => colors.black};
+  background-color: ${({theme: {colors}}) => colors.black};
 
-  @media (min-width: ${({ theme: { mediaQueries } }) =>
+  @media (min-width: ${({theme: {mediaQueries}}) =>
       mediaQueries.mobileBreakpoint}) {
-    flex-flow: ${({ flexFlow }) => flexFlow};
+    flex-flow: ${({flexFlow}) => flexFlow};
   }
 `;
 
@@ -29,7 +29,7 @@ const Title = styled.span`
   font-size: 24px;
   margin-bottom: 24px;
   text-transform: capitalize;
-  color: ${({ theme: { colors } }) => colors.whiteSmoke};
+  color: ${({theme: {colors}}) => colors.whiteSmoke};
 `;
 
 const FormContainer = ({
