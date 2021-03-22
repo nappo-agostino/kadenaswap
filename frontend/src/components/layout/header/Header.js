@@ -43,7 +43,8 @@ const Container = styled.div`
 
 const LeftContainer = styled.div`
   display: flex;
-  align-items: center;
+  align-items: flex-start;
+  line-height: 10px;
   margin-right: 25px;
   & > *:not(:last-child) {
     margin-right: 25px;
@@ -59,6 +60,8 @@ const Label = styled.span`
 const RightContainer = styled.div`
   display: flex;
   align-items: center;
+  line-height: 0px;
+
   & > *:first-child {
     margin-right: 13px;
   }
@@ -123,9 +126,12 @@ const Header = () => {
     <Container>
       <LeftContainer>
         <KDALogo
-          style={{ cursor: "pointer" }}
+          style={{ cursor: "pointer", marginRight: 10 }}
           onClick={() => history.push(ROUTE_INDEX)}
         />
+        <Item className="mobile-none" to="/">
+          Kadena
+        </Item>
         <Item to={ROUTE_SWAP}>swap</Item>
         <Item to={ROUTE_POOL}>pool</Item>
         <Item to={ROUTE_WRAP}>wrap</Item>
@@ -215,18 +221,22 @@ const Header = () => {
         )}
         {!pact?.account.account && (
           <>
-            <Item className="mobile-none" to="#">
-              <Button
-                hover={true}
-                background="white"
-                color={theme.colors.pink}
-                buttonStyle={{ padding: "10px 16px" }}
-                fontSize={14}
-                onClick={() => setOpenKdaModal(true)}
-              >
-                Connect Wallet
-              </Button>
-            </Item>
+            <Button
+              className="mobile-none"
+              hover={true}
+              background={theme.colors.lightBlue}
+              color="white"
+              buttonStyle={{
+                color: "white",
+                padding: "10px 16px",
+                borderRadius: 20,
+                height: 32,
+              }}
+              fontSize={14}
+              onClick={() => setOpenKdaModal(true)}
+            >
+              Connect Wallet
+            </Button>
           </>
         )}
         {pact?.account.account && (

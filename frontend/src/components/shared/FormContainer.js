@@ -1,17 +1,27 @@
-import React from 'react';
-import PropTypes from 'prop-types';
-import styled from 'styled-components/macro';
-import { ReactComponent as CloseIcon } from '../../assets/images/shared/cross.svg';
+import React from "react";
+import PropTypes from "prop-types";
+import styled from "styled-components/macro";
+import { ReactComponent as CloseIcon } from "../../assets/images/shared/cross.svg";
+
+const Wrapper = styled.div`
+  display: flex;
+  flex-flow: column;
+`;
 
 const Container = styled.div`
   position: relative;
   display: flex;
   flex-flow: column;
-  padding: 20px 20px;
-  max-width: 385px;
+  padding: 32px;
+  max-width: 757px;
   width: 100%;
   border-radius: 10px;
-  background-color: white;
+  background-color: ${({ theme: { colors } }) => colors.black};
+
+  @media (min-width: ${({ theme: { mediaQueries } }) =>
+      mediaQueries.mobileBreakpoint}) {
+    flex-flow: ${({ flexFlow }) => flexFlow};
+  }
 `;
 
 const Title = styled.span`
@@ -19,27 +29,49 @@ const Title = styled.span`
   font-size: 24px;
   margin-bottom: 24px;
   text-transform: capitalize;
-  text-align: center;
+  color: ${({ theme: { colors } }) => colors.whiteSmoke};
 `;
 
-const FormContainer = ({ title, containerStyle, titleStyle, children, onClose }) => {
+const FormContainer = ({
+  title,
+  containerStyle,
+  titleStyle,
+  flexFlow,
+  children,
+  onClose,
+}) => {
   return (
-    <Container style={containerStyle}>
-      {onClose && <CloseIcon style={{ cursor: 'pointer', position: 'absolute', top: 18, right: 14 }} onClick={onClose} />}
+    <Wrapper>
       {title && <Title style={titleStyle}>{title}</Title>}
-      {children}
-    </Container>
+      <Container style={containerStyle} flexFlow={flexFlow}>
+        {onClose && (
+          <CloseIcon
+            style={{
+              cursor: "pointer",
+              position: "absolute",
+              top: 18,
+              right: 14,
+            }}
+            onClick={onClose}
+          />
+        )}
+
+        {children}
+      </Container>
+    </Wrapper>
   );
 };
 
 FormContainer.propTypes = {
   title: PropTypes.string,
-  onClose: PropTypes.func
+  flexFlow: PropTypes.oneOf(["row", "column"]),
+  onClose: PropTypes.func,
 };
 
 FormContainer.defaultProps = {
-  title: '',
-  onClose: null
+  title: "",
+  flexFlow: "column",
+  onClose: null,
 };
 
 export default FormContainer;
